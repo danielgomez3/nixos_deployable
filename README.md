@@ -13,3 +13,4 @@ key is needed for maintaining the repo.
 ## TODO
 
 - Use different method of Github authentication for repo maintenance.
+- Make EVERYTHING pure (remove absolute paths).

@@ -47,10 +47,10 @@
     enable = true;
     #initExtra = "neofetch --ascii_distro NixOS_small";
     # source /home/daniel/.config/home-manager/cdimascio-lambda.zsh-theme
-    initExtra = 
-      "
-      neofetch --config /home/daniel/dotfiles/images/neofetch.conf --kitty --image_size 200px --source /home/daniel/dotfiles/images/nix-logo.png --memory_percent on --memory_unit gib --os_arch off --packages tiny --shell_version off --color_blocks off
-      ";
+    #initExtra = 
+    #  "
+    #  neofetch --config /home/daniel/dotfiles/images/neofetch.conf --kitty --image_size 200px --source /home/daniel/dotfiles/images/nix-logo.png --memory_percent on --memory_unit gib --os_arch off --packages tiny --shell_version off --color_blocks off
+    #  ";
     shellAliases = {
       ll = "ls -l";
       update = "sudo nixos-rebuild switch";
