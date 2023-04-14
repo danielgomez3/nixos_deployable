@@ -45,9 +45,15 @@
     pkgs.wofi
     pkgs.polkit
     pkgs.xdg-desktop-portal-hyprland
-    pkgs.waybar
     pkgs.hyprpaper
     pkgs.xorg.xrandr
+    # waybar
+    pkgs.waybar
+    pkgs.xorg.xbacklight
+    pkgs.mdp
+    pkgs.gtk4
+    pkgs.gtk3
+    pkgs.nerdfonts
   ]; 
   
   programs.zsh = {
@@ -212,19 +218,61 @@
     
   };
 
-
-  # Waybar
-#  programs.waybar = {
-#    enable = true;
-#  };
   
- 
-  
-  
-  
+  programs.waybar.settings = {
+    enable = true;
+    mainBar = {
+      layer = "top";
+      position = "top";
+      height = 30;
+      output = [
+        "eDP-1"
+        "HDMI-A-1"
+      ];
+      modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
+      modules-center = [ "sway/window" "custom/hello-from-waybar" ];
+      modules-right = [ "mpd" "custom/mymodule#with-css-id" "temperature" ];
+
+      "sway/workspaces" = {
+        disable-scroll = true;
+        all-outputs = true;
+      };
+      "custom/hello-from-waybar" = {
+        format = "hello {}";
+        max-length = 40;
+        interval = "once";
+        exec = pkgs.writeShellScript "hello-from-waybar" ''
+          echo "from within waybar"
+        '';
+      };
+    };
+  };
 
 
+  programs.waybar.systemd = {
+    enable = true;
+  };
 
+
+#  nixpkgs.overlays = [
+#  (self: super:
+#  {
+#  waybar = super.waybar.overrideAttrs (old: {
+#    src = super.fetchFromGitHub {
+#      owner = "Alexays";
+#      repo = "Waybar";
+#      rev = "0dmds7g9mgf4n64qb9yd6ydbypv3jyjbb1wv7dv3l0zxnwxbd71q";
+#      # If you don't know the hash, the first time, set:
+#      # hash = "";
+#      # then nix will fail the build with such an error message:
+#      # hash mismatch in fixed-output derivation '/nix/store/m1ga09c0z1a6n7rj8ky3s31dpgalsn0n-source':
+#      # specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+#      # got:    sha256-173gxk0ymiw94glyjzjizp8bv8g72gwkjhacigd1an09jshdrjb4
+#      hash = "";
+#    };
+#  });
+#  })
+#];
   
   
   
