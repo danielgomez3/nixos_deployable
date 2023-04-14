@@ -1,8 +1,8 @@
 {pkgs, ... }:{
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
-  home.username = "${user}";
-  home.homeDirectory = "/home/${user}";
+  home.username = "daniel";
+  home.homeDirectory = "/home/daniel";
 
 
   # This value determines the Home Manager release that your
@@ -19,6 +19,7 @@
   programs.home-manager.enable = true;
   
   home.packages = [
+    pkgs.chromium
     pkgs.zathura
     pkgs.pavucontrol
     pkgs.neofetch
@@ -33,16 +34,22 @@
     pkgs.feh
     # Helix editor deps.
     pkgs.ltex-ls
-    # Dwm deps.
-    pkgs.xmenu
-    pkgs.gnumake
     pkgs.qutebrowser
-    pkgs.polybar
-  ];
+    # Hyprland deps
+    pkgs.hyprland
+    pkgs.wayland
+    pkgs.libsForQt5.qt5.qtwayland
+    pkgs.dunst
+    pkgs.wireplumber
+    pkgs.pciutils
+    pkgs.wofi
+    pkgs.polkit
+    pkgs.xdg-desktop-portal-hyprland
+    pkgs.waybar
+    pkgs.hyprpaper
+    pkgs.xorg.xrandr
+  ]; 
   
-  
-  # Here's what's happening: I'm combining themes in a hacky way. Sourcing
-  # One, declaring another. This will break. Looks great rn tho.
   programs.zsh = {
     enable = true;
     shellAliases = {
@@ -171,13 +178,8 @@
       # importing ForegroundIntense
       # importing General";
   };
+ 
   
-
-  # Unclutter
-  services.unclutter = {
-    enable = true;
-  };
-    
   
 
   # Qutebrowser
@@ -210,12 +212,11 @@
     
   };
 
-  
-  
-  
-  # Neofetch:
-  services.neofetch.enable = true;
-  
+
+  # Waybar
+#  programs.waybar = {
+#    enable = true;
+#  };
   
  
   

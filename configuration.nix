@@ -48,20 +48,33 @@
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  # Enable sound.
+  # Enable sound. Pulseaudio.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  #hardware.pulseaudio.enable = true;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+
+  # Enable Wireplumber:
+  services.pipewire.wireplumber = {
+    enable = true;
+  };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users = {
-    "${user}" = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-      description = "the one and only";
-    };
+  users.users.daniel = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    home = "/home/daniel";
+    description = "the one and only";
+    packages = with pkgs; [
+    ];
   };
 
   # List packages installed in system profile. To search, run:
@@ -69,8 +82,6 @@
   environment.systemPackages = with pkgs; [
     wget curl iwd dhcpcd helix vim
     git cachix 
-    st chromium rofi dmenu
-
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -120,32 +131,6 @@
   environment.shells = with pkgs; [ zsh ]; # For errors.
 
   
-  # Dwm:
-  services.xserver.displayManager.lightdm.enable = false;
-  services.xserver.displayManager.startx.enable = true;
-  services.xserver.windowManager.dwm.enable = true;
-  hardware.opengl.enable = true;
-  services.xserver.enable = true;
-  nixpkgs.overlays = [ (self: super: {
-    dwm = super.dwm.overrideAttrs (old: {
-      pname = "dwm";
-      version = "6.2";
-      src = super.fetchurl {
-        url = "https://dl.suckless.org/dwm/dwm-6.2.tar.gz";
-        sha256 = "l5AuLgB6rqo8bjvtH4F4W4F7dBOUfx2x07YrjaTNEQ4=";
-      };
-      patches = [
-        (super.fetchpatch {
-          url = "https://raw.githubusercontent.com/danielgomez3/dwmpatch/main/dwmpatch_danielgomez3.diff";
-          sha256 = "1li595dgxpklw6x67hdx810v5n65q7b5bwh9g8nd2jh7gn4ymplh";
-        })
-      ];
-    });
-}) ];
-
-
-
-
   
   # Helix:
   # Set default editor (for sudoedit, etc.):
@@ -165,6 +150,17 @@
     extraOptions = "experimental-features = nix-command flakes";
     
   };
+
+  # Hyprland
+  programs.hyprland = {
+    enable = true;
+    #xwayland = {
+    #  enable = true;
+    #};
+  };
+
+
+  
   
 
 
