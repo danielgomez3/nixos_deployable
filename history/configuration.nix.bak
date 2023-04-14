@@ -56,12 +56,13 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users = {
-    "${user}" = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-      description = "the one and only";
-    };
+  users.users.daniel = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    home = "/home/daniel";
+    description = "the one and only";
+    packages = with pkgs; [
+    ];
   };
 
   # List packages installed in system profile. To search, run:
