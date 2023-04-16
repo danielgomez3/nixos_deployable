@@ -1,280 +1,170 @@
-{pkgs, ... }:{
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
-  home.username = "daniel";
-  home.homeDirectory = "/home/daniel";
+# Edit this configuration file to define what should be installed on
+# your system.  Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running ‘nixos-help’).
 
-
-  # This value determines the Home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new Home Manager release introduces backwards
-  # incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See
-  # the Home Manager release notes for a list of state version
-  # changes in each release.
-  home.stateVersion = "22.11";
-
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
-  
-  home.packages = [
-    pkgs.chromium
-    pkgs.zathura
-    pkgs.pavucontrol
-    pkgs.neofetch
-    pkgs.picom
-    pkgs.rofi
-    pkgs.xclip
-    pkgs.flameshot
-    pkgs.brightnessctl
-    pkgs.xbanish
-    pkgs.kitty
-    pkgs.flashfocus
-    pkgs.feh
-    # Helix editor deps.
-    pkgs.ltex-ls
-    pkgs.qutebrowser
-    # Hyprland deps
-    pkgs.hyprland
-    pkgs.wayland
-    pkgs.libsForQt5.qt5.qtwayland
-    pkgs.dunst
-    pkgs.wireplumber
-    pkgs.pciutils
-    pkgs.wofi
-    pkgs.polkit
-    pkgs.xdg-desktop-portal-hyprland
-    pkgs.hyprpaper
-    pkgs.xorg.xrandr
-    # waybar
-    pkgs.waybar
-    pkgs.xorg.xbacklight
-    pkgs.mdp
-    pkgs.gtk4
-    pkgs.gtk3
-    pkgs.nerdfonts
-  ]; 
-  
-  programs.zsh = {
-    enable = true;
-    shellAliases = {
-      ll = "ls -l";
-      update = "sudo nixos-rebuild switch";
-    };
-    oh-my-zsh = {
-      enable = true;
-      plugins = [ "git"];
-      # Really Good, Minimal, Time, Git.
-      theme = "dst"; 
-    };
-  };
-  
-  
-  
-
-  
-      
-        
-  # Rofi:
-  programs.rofi = {
-        enable = true;
-        theme = "sidebar";
-      };  
-  
-  # Helix editor:
-  programs.helix.enable = true;
-  programs.helix = {
-    languages = [
-      {
-        name = "rust";
-        auto-format = false;
-      }
-      {
-        name = "markdown";
-        language-server = {command = "ltex-ls";};
-        file-types = ["md"];
-        scope = "source.markdown";
-        roots = [""];
-      }
+{ config,pkgs,lib, ... }: {
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
     ];
-    settings = {
-        theme = "catppuccin_frappe";
-        editor = {
-          line-number = "relative";
-          rulers = [80];
-        };
-    };
-  };
-  
-  
-  # Kitty Terminal:
-  programs.kitty = {
-    enable = true;
-    #theme = "DarkOneNuanced";
-    font.size = 9.0;
-    font.name = "DejaVu Sans";
-    settings = {
-      enable_audio_bell = false;
-      confirm_os_window_close = 0;
-    };
-    # This has to happen because kitty-theme derivation is broken:
-    extraConfig = "
-      # Dark One Nuanced by ariasuni, https://store.kde.org/p/1225908
-      # Imported from KDE .colorscheme format by thematdev, https://thematdev.org
-      # For migrating your schemes from Konsole format see 
-      # https://git.thematdev.org/thematdev/konsole-scheme-migration
+
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  # networking.hostName = "nixos"; # Define your hostname.
+  # Pick only one of the below networking options.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+
+  # Set your time zone.
+  # time.timeZone = "Europe/Amsterdam";
+
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  # Select internationalisation properties.
+  # i18n.defaultLocale = "en_US.UTF-8";
+  # console = {
+  #   font = "Lat2-Terminus16";
+  #   keyMap = "us";
+  #   useXkbConfig = true; # use xkbOptions in tty.
+  # };
+
+  # Enable the X11 windowing system.
+  # services.xserver.enable = true;
 
 
-      # importing Background
-      background #282c34
-      # importing BackgroundFaint
-      # importing BackgroundIntense
-      # importing Color0
-      color0 #3f4451
-      # importing Color0Faint
-      color16 #282c34
-      # importing Color0Intense
-      color8 #4f5666
-      # importing Color1
-      color1 #e06c75
-      # importing Color1Faint
-      color17 #c25d66
-      # importing Color1Intense
-      color9 #ff7b86
-      # importing Color2
-      color2 #98c379
-      # importing Color2Faint
-      color18 #82a566
-      # importing Color2Intense
-      color10 #b1e18b
-      # importing Color3
-      color3 #d19a66
-      # importing Color3Faint
-      color19 #b38257
-      # importing Color3Intense
-      color11 #efb074
-      # importing Color4
-      color4 #61afef
-      # importing Color4Faint
-      color20 #5499d1
-      # importing Color4Intense
-      color12 #67cdff
-      # importing Color5
-      color5 #c678dd
-      # importing Color5Faint
-      color21 #a966bd
-      # importing Color5Intense
-      color13 #e48bff
-      # importing Color6
-      color6 #56b6c2
-      # importing Color6Faint
-      color22 #44919a
-      # importing Color6Intense
-      color14 #63d4e0
-      # importing Color7
-      color7 #e6e6e6
-      # importing Color7Faint
-      color23 #c8c8c8
-      # importing Color7Intense
-      color15 #ffffff
-      # importing Foreground
-      foreground #abb2bf
-      # importing ForegroundFaint
-      # importing ForegroundIntense
-      # importing General";
-  };
- 
-  
   
 
-  # Qutebrowser
-  programs.qutebrowser = {
-    enable = true;
-    searchEngines = {
-      DEFAULT = "https://google.com/search?hl=en&q={}";
-    };
-    extraConfig = 
-    ''
-    c.url.start_pages = ['google.com']
+  # Configure keymap in X11
+  # services.xserver.layout = "us";
+  # services.xserver.xkbOptions = {
+  #   "eurosign:e";
+  #   "caps:escape" # map caps to escape.
+  # };
 
-    import os
-    from urllib.request import urlopen
+  # Enable CUPS to print documents.
+  # services.printing.enable = true;
 
-    # load your autoconfig, use this, if the rest of your config is empty!
-    config.load_autoconfig()
+  # Enable sound.
+  sound.enable = true;
+  hardware.pulseaudio.enable = true;
 
-    if not os.path.exists(config.configdir / "theme.py"):
-        theme = "https://raw.githubusercontent.com/catppuccin/qutebrowser/main/setup.py"
-        with urlopen(theme) as themehtml:
-            with open(config.configdir / "theme.py", "a") as file:
-                file.writelines(themehtml.read().decode("utf-8"))
+  # Enable touchpad support (enabled default in most desktopManager).
+  # services.xserver.libinput.enable = true;
 
-    if os.path.exists(config.configdir / "theme.py"):
-        import theme
-        theme.setup(c, 'frappe', True)
-    
-    '';
-    
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+      description = "the one and only";
   };
 
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+    wget curl iwd dhcpcd helix vim
+    git cachix 
+    st chromium rofi dmenu
+
+  ];
+
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
+
+  # List services that you want to enable:
+
+  # Enable the OpenSSH daemon.
+  services.openssh.enable = true;
+
+  # Open ports in the firewall.
+  # networking.firewall.allowedTCPPorts = [ ... ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+  # Or disable the firewall altogether.
+  # networking.firewall.enable = false;
+
+  # Copy the NixOS configuration file and link it from the resulting system
+  # (/run/current-system/configuration.nix). This is useful in case you
+  # accidentally delete configuration.nix.
+  # system.copySystemConfiguration = true;
+
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "22.11"; # Did you read the comment?
+
+  ## DANIEL'S ADDED OPTIONS:
+
+
+
+  # Networking:
+  networking.wireless.iwd.enable = true;
+  networking.networkmanager.wifi.backend = "iwd";
+	
+
+  # Shell (needs to be done here and home.nix):
+  programs.zsh.enable = true;
+  users.users.daniel.shell = pkgs.zsh;
+  environment.shells = with pkgs; [ zsh ]; # For errors.
+
   
-  programs.waybar.settings = {
-    enable = true;
-    mainBar = {
-      layer = "top";
-      position = "top";
-      height = 30;
-      output = [
-        "eDP-1"
-        "HDMI-A-1"
+  # Dwm:
+  services.xserver.displayManager.lightdm.enable = false;
+  services.xserver.displayManager.startx.enable = true;
+  services.xserver.windowManager.dwm.enable = true;
+  hardware.opengl.enable = true;
+  services.xserver.enable = true;
+  nixpkgs.overlays = [ (self: super: {
+    dwm = super.dwm.overrideAttrs (old: {
+      pname = "dwm";
+      version = "6.2";
+      src = super.fetchurl {
+        url = "https://dl.suckless.org/dwm/dwm-6.2.tar.gz";
+        sha256 = "l5AuLgB6rqo8bjvtH4F4W4F7dBOUfx2x07YrjaTNEQ4=";
+      };
+      patches = [
+        (super.fetchpatch {
+          url = "https://raw.githubusercontent.com/danielgomez3/dwmpatch/main/dwmpatch_danielgomez3.diff";
+          sha256 = "1li595dgxpklw6x67hdx810v5n65q7b5bwh9g8nd2jh7gn4ymplh";
+        })
       ];
-      modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
-      modules-center = [ "sway/window" "custom/hello-from-waybar" ];
-      modules-right = [ "mpd" "custom/mymodule#with-css-id" "temperature" ];
+    });
+}) ];
 
-      "sway/workspaces" = {
-        disable-scroll = true;
-        all-outputs = true;
-      };
-      "custom/hello-from-waybar" = {
-        format = "hello {}";
-        max-length = 40;
-        interval = "once";
-        exec = pkgs.writeShellScript "hello-from-waybar" ''
-          echo "from within waybar"
-        '';
-      };
-    };
+
+
+
+  
+  # Helix:
+  # Set default editor (for sudoedit, etc.):
+  environment.variables.EDITOR = "vim";
+  
+  # Git
+  programs.ssh.askPassword = "";
+
+
+  # Don't ask users of group 'wheel' for a password:
+  security.sudo.wheelNeedsPassword = false; 
+  
+
+  # Enable flakes and experimental features
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = "experimental-features = nix-command flakes";
+    
   };
-
-
-  programs.waybar.systemd = {
-    enable = true;
-  };
-
-
-#  nixpkgs.overlays = [
-#  (self: super:
-#  {
-#  waybar = super.waybar.overrideAttrs (old: {
-#    src = super.fetchFromGitHub {
-#      owner = "Alexays";
-#      repo = "Waybar";
-#      rev = "0dmds7g9mgf4n64qb9yd6ydbypv3jyjbb1wv7dv3l0zxnwxbd71q";
-#      # If you don't know the hash, the first time, set:
-#      # hash = "";
-#      # then nix will fail the build with such an error message:
-#      # hash mismatch in fixed-output derivation '/nix/store/m1ga09c0z1a6n7rj8ky3s31dpgalsn0n-source':
-#      # specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-#      # got:    sha256-173gxk0ymiw94glyjzjizp8bv8g72gwkjhacigd1an09jshdrjb4
-#      hash = "";
-#    };
-#  });
-#  })
-#];
   
-  
-  
+
 
 }
+

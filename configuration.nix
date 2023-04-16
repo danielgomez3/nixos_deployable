@@ -13,60 +13,62 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # networking.hostName = "nixos"; # Define your hostname.
+  # Pick only one of the below networking options.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   # Set your time zone.
-  time.timeZone = "America/Boise";
+  # time.timeZone = "Europe/Amsterdam";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
+  # i18n.defaultLocale = "en_US.UTF-8";
   # console = {
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
   #   useXkbConfig = true; # use xkbOptions in tty.
   # };
 
+  # Enable the X11 windowing system.
+  # services.xserver.enable = true;
+
+
+  
+
+  # Configure keymap in X11
+  # services.xserver.layout = "us";
+  # services.xserver.xkbOptions = {
+  #   "eurosign:e";
+  #   "caps:escape" # map caps to escape.
+  # };
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  # Enable sound. Pulseaudio.
+  # Enable sound.
   sound.enable = true;
-  #hardware.pulseaudio.enable = true;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
-  # Enable Wireplumber:
-  services.pipewire.wireplumber = {
-    enable = true;
-  };
+  hardware.pulseaudio.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.daniel = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "input" ]; # Enable ‘sudo’ for the user.
-    home = "/home/daniel";
-    description = "the one and only";
-    packages = with pkgs; [
-    ];
-  };
+  users.users = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+      description = "the one and only";
+    };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     wget curl iwd dhcpcd helix vim
-    git cachix
+    git cachix 
+    st chromium rofi dmenu
+
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -116,6 +118,32 @@
   environment.shells = with pkgs; [ zsh ]; # For errors.
 
   
+  # Dwm:
+  services.xserver.displayManager.lightdm.enable = false;
+  services.xserver.displayManager.startx.enable = true;
+  services.xserver.windowManager.dwm.enable = true;
+  hardware.opengl.enable = true;
+  services.xserver.enable = true;
+  nixpkgs.overlays = [ (self: super: {
+    dwm = super.dwm.overrideAttrs (old: {
+      pname = "dwm";
+      version = "6.2";
+      src = super.fetchurl {
+        url = "https://dl.suckless.org/dwm/dwm-6.2.tar.gz";
+        sha256 = "l5AuLgB6rqo8bjvtH4F4W4F7dBOUfx2x07YrjaTNEQ4=";
+      };
+      patches = [
+        (super.fetchpatch {
+          url = "https://raw.githubusercontent.com/danielgomez3/dwmpatch/main/dwmpatch_danielgomez3.diff";
+          sha256 = "";
+        })
+      ];
+    });
+}) ];
+
+
+
+
   
   # Helix:
   # Set default editor (for sudoedit, etc.):
@@ -135,22 +163,7 @@
     extraOptions = "experimental-features = nix-command flakes";
     
   };
-
-  # Hyprland
-  programs.hyprland = {
-    enable = true;
-    #xwayland = {
-    #  enable = true;
-    #};
-  };
-
-  # Change some environment variables.
-  # Instigatied by 'eww' in home-manager:
   
 
 
-
-
 }
-
-
